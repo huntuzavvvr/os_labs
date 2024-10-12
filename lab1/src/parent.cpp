@@ -16,6 +16,10 @@ std::string ParentRoutine(std::string filename){
     }
 
     pid_t pid = fork();
+    if (pid == -1){
+        perror("Fork error");
+        exit(-1);
+    }
 
     if (pid == 0){
         if(dup2(pipe1[0], STDIN_FILENO) == -1){
@@ -37,8 +41,6 @@ std::string ParentRoutine(std::string filename){
     }
     else{
         std::string temp;
-        // std::string filename;
-        // std::getline(std::cin, filename);
         if (!std::filesystem::exists(filename)){
             perror("File not found");
             exit(-1);
